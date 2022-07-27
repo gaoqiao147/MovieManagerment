@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.freesoft.mapper.MovieUserinfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.freesoft.model.MovieUserinfoDO">
+        <id column="uid" property="uid"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        uid
+        , username, password, age, sex
+    </sql>
+
+    <!-- 通过用户id查询该用户收藏的电影   -->
+    <select id="getCollectionMovie" resultType="com.freesoft.vo.MovieNameVO">
+        SELECT i.mname
+        FROM movie_information i
+        WHERE i.mid IN (
+            SELECT c.mid
+            FROM movie_collection c
+            WHERE c.uid = #{uid}
+        )
+
+    </select>
+
+</mapper>
