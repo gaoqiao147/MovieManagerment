@@ -22,13 +22,13 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/movieCategoryDO")
+@RequestMapping("/movie-category")
 public class MovieCategoryController {
 
     @Resource
     private MovieCategoryService movieCategoryService;
 
-    @GetMapping("/getAllCategory")
+    @GetMapping("/get-all-category")
     @ApiOperation(value = "获取电影全部类别", notes = "获取全部电影类别")
     public ResultVo getAllCategory(){
         List list = movieCategoryService.listAllCategory();
@@ -39,12 +39,12 @@ public class MovieCategoryController {
         }
     }
 
-    @PostMapping("/addCategory")
+    @PostMapping("/add-category")
     @ApiOperation(value = "添加电影分类", notes = "添加电影分类", produces = "application/json")
     public ResultVo addCategory(@ApiParam(name = "传入电影类别信息" , value = "传入json数据格式") @RequestBody MovieCategoryDO movieCategoryDO){
         Integer addResult = movieCategoryService.addCategory(movieCategoryDO);
         if(addResult > 0){
-            return CommonResult.success("添加电影成功");
+            return CommonResult.success("添加电影分类成功");
         }else{
             return CommonResult.fail(null);
         }
