@@ -1,0 +1,136 @@
+/*
+ Navicat MySQL Data Transfer
+
+ Source Server         : FirstSql
+ Source Server Type    : MySQL
+ Source Server Version : 80028
+ Source Host           : localhost:3306
+ Source Schema         : movie
+
+ Target Server Type    : MySQL
+ Target Server Version : 80028
+ File Encoding         : 65001
+
+ Date: 24/08/2022 11:27:43
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for movie_category
+-- ----------------------------
+DROP TABLE IF EXISTS `movie_category`;
+CREATE TABLE `movie_category`  (
+  `cid` int NOT NULL AUTO_INCREMENT COMMENT '电影类别id',
+  `cname` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '电影类别名称',
+  PRIMARY KEY (`cid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of movie_category
+-- ----------------------------
+INSERT INTO `movie_category` VALUES (1, '恐怖');
+INSERT INTO `movie_category` VALUES (2, '喜剧');
+INSERT INTO `movie_category` VALUES (3, '儿童');
+INSERT INTO `movie_category` VALUES (4, '动漫');
+INSERT INTO `movie_category` VALUES (5, '悬疑');
+INSERT INTO `movie_category` VALUES (6, '科幻');
+INSERT INTO `movie_category` VALUES (7, '浪漫');
+INSERT INTO `movie_category` VALUES (8, '科幻');
+INSERT INTO `movie_category` VALUES (9, '科幻');
+INSERT INTO `movie_category` VALUES (10, '刺激');
+INSERT INTO `movie_category` VALUES (11, '动作');
+
+-- ----------------------------
+-- Table structure for movie_collection
+-- ----------------------------
+DROP TABLE IF EXISTS `movie_collection`;
+CREATE TABLE `movie_collection`  (
+  `mid` int NOT NULL,
+  `uid` int NOT NULL,
+  `date` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`mid`, `uid`) USING BTREE,
+  INDEX `uid`(`uid`) USING BTREE,
+  CONSTRAINT `movie_collection_ibfk_1` FOREIGN KEY (`mid`) REFERENCES `movie_information` (`mid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `movie_collection_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `movie_userinfo` (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of movie_collection
+-- ----------------------------
+INSERT INTO `movie_collection` VALUES (1, 1, '2022-07-22 16:51:32');
+INSERT INTO `movie_collection` VALUES (1, 2, '2022-07-25 09:39:05');
+INSERT INTO `movie_collection` VALUES (2, 1, '2022-07-22 17:11:11');
+INSERT INTO `movie_collection` VALUES (2, 2, '2022-07-25 09:37:28');
+INSERT INTO `movie_collection` VALUES (3, 1, '2022-07-25 10:52:35');
+
+-- ----------------------------
+-- Table structure for movie_information
+-- ----------------------------
+DROP TABLE IF EXISTS `movie_information`;
+CREATE TABLE `movie_information`  (
+  `mid` int NOT NULL AUTO_INCREMENT COMMENT '电影详情id',
+  `mname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '电影名称',
+  `price` decimal(5, 2) NULL DEFAULT NULL COMMENT '电影票单价',
+  `date` datetime NULL DEFAULT NULL COMMENT '电影上映时间',
+  `movie_cid` int NOT NULL COMMENT '外键_电影类别id',
+  PRIMARY KEY (`mid`) USING BTREE,
+  INDEX `movie_cid`(`movie_cid`) USING BTREE,
+  CONSTRAINT `movie_information_ibfk_1` FOREIGN KEY (`movie_cid`) REFERENCES `movie_category` (`cid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of movie_information
+-- ----------------------------
+INSERT INTO `movie_information` VALUES (1, '唐人街探案', 55.50, '2021-09-02 12:00:00', 2);
+INSERT INTO `movie_information` VALUES (2, '泰囧', 30.00, '2012-12-22 10:00:00', 1);
+INSERT INTO `movie_information` VALUES (3, '肖申克的救赎', 25.00, '1995-07-10 10:00:00', 2);
+
+-- ----------------------------
+-- Table structure for movie_tree
+-- ----------------------------
+DROP TABLE IF EXISTS `movie_tree`;
+CREATE TABLE `movie_tree`  (
+  `id` int NOT NULL COMMENT 'id值',
+  `type_name` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `type_sign` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `parent_id` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of movie_tree
+-- ----------------------------
+INSERT INTO `movie_tree` VALUES (1, '总分类', 'A', 0);
+INSERT INTO `movie_tree` VALUES (2, '电影', 'B', 1);
+INSERT INTO `movie_tree` VALUES (3, '电视剧', 'B', 1);
+INSERT INTO `movie_tree` VALUES (4, '综艺', 'B', 1);
+INSERT INTO `movie_tree` VALUES (5, '喜剧', 'C', 2);
+INSERT INTO `movie_tree` VALUES (6, '恐怖', 'C', 2);
+INSERT INTO `movie_tree` VALUES (7, '国产剧', 'C', 3);
+INSERT INTO `movie_tree` VALUES (8, '韩剧', 'C', 3);
+INSERT INTO `movie_tree` VALUES (9, '奔跑吧兄弟', 'C', 4);
+
+-- ----------------------------
+-- Table structure for movie_userinfo
+-- ----------------------------
+DROP TABLE IF EXISTS `movie_userinfo`;
+CREATE TABLE `movie_userinfo`  (
+  `uid` int NOT NULL AUTO_INCREMENT COMMENT '电影观众id',
+  `username` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `age` int NULL DEFAULT NULL COMMENT '年龄',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
+  PRIMARY KEY (`uid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of movie_userinfo
+-- ----------------------------
+INSERT INTO `movie_userinfo` VALUES (1, 'zhouwei', '123456', 22, '1');
+INSERT INTO `movie_userinfo` VALUES (2, 'wangmingsen', '123456', 24, '1');
+INSERT INTO `movie_userinfo` VALUES (3, 'admin', 'c5833cfad830db4350cc48af3e503db4', NULL, NULL);
+INSERT INTO `movie_userinfo` VALUES (4, 'root', '00b3187384f2708025074f28764a4a30', NULL, '0');
+
+SET FOREIGN_KEY_CHECKS = 1;
